@@ -1,0 +1,59 @@
+$breakpoints: (
+    "sm": 767px,
+    "md": 768px,
+    "lg": 992px,
+);
+
+//media queries. These mixins can be nested during usage to combine them via "and"
+
+@mixin devices($breakpoint) {
+    @if $breakpoint == desktop {
+        @media only screen and (min-width: map-get($breakpoints, "lg")) {
+            @content;
+        }
+    } @else if $breakpoint == tablet {
+        @media only screen and (map-get($breakpoints, "md") <= width < map-get($breakpoints, "lg")) {
+            @content;
+        }
+    } @else if $breakpoint == mobile {
+        @media only screen and (width < map-get($breakpoints, "sm")) {
+            @content;
+        }
+    }
+}
+
+@mixin minCustomDevice($breakpoint) {
+    @media only screen and (min-width: $breakpoint) {
+        @content;
+    }
+}
+
+@mixin maxCustomDevice($breakpoint) {
+    @media only screen and (max-width: $breakpoint) {
+        @content;
+    }
+}
+
+@mixin minmaxCustomDevice($minBreakpoint, $maxBreakpoint) {
+    @media only screen and (min-width: $minBreakpoint) and (max-width: $maxBreakpoint) {
+        @content;
+    }
+}
+
+@mixin screen-type($orientation) {
+    @if $orientation == portrait { // viewport width < height
+        @media (orientation: portrait) {
+            @content;
+        }
+    } @else if $orientation == landscape { // viewport width >= height
+        @media (orientation: landscape) {
+            @content;
+        }
+    }
+}
+
+@mixin pointingDevice($pointer) {
+    @media (pointer: $pointer) {
+        @content;
+    }
+}

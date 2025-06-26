@@ -1,0 +1,29 @@
+@use "./partials/utils";
+@use "./partials/mediaQuery";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a,
+button,
+img,
+input {
+  display: inline-block;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+input[type=number] {
+  appearance: none;
+  -webkit-appearance: none;
+}
