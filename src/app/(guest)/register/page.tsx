@@ -1,11 +1,12 @@
 import React from "react";
-import RegistrationForm from "@/components/forms/registration";
+import RegistrationForm, { RegistrationData } from "@/components/forms/registration";
 
 export default function Page() {
-    async function handleRegistration() {
+    async function handleRegistration(state: RegistrationData) {
         "use server";
         // Handle registration logic here
+        return state;
     }
 
-    return <RegistrationForm />;
+    return <RegistrationForm onSubmit={handleRegistration}/>;
 }

@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "tw-animate-css"; /* Separate stylesheet as css @property rule not supported in SASS */
+@import "tw-animate-css";
+/* Separate stylesheet as css @property rule not supported in SASS */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,21 +42,28 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) + 4px);
+    --color-tertiary: var(--tertiary);
+    --color-brand-300: var(--brand-300);
+    --color-quaternary: var(--quaternary);
 }
 
 :root {
     --radius: 0.625rem;
     --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --foreground: #1A1A1A;
+    /*oklch(0.145 0 0);*/
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: #2B2B2B;/*oklch(0.205 0 0);*/
+    --primary: #2B2B2B;
+    /*oklch(0.205 0 0);*/
     --primary-foreground: oklch(0.985 0 0);
-    --secondary:  #4B4B4B; /*oklch(0.97 0 0); */
+    --secondary: #4B4B4B;
+    /*oklch(0.97 0 0); */
     --secondary-foreground: oklch(0.205 0 0);
-    --muted: #F2F2F2; /*oklch(0.97 0 0);*/
+    --muted: #F2F2F2;
+    /*oklch(0.97 0 0);*/
     --muted-foreground: oklch(0.556 0 0);
     --accent: oklch(0.97 0 0);
     --accent-foreground: oklch(0.205 0 0);
@@ -76,6 +84,9 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --tertiary: #535862;
+    --brand-300: #8564F1;
+    --quaternary: #ADADAD;
 }
 
 .dark {
