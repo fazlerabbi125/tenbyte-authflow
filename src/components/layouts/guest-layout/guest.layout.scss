@@ -1,0 +1,49 @@
+@use "@/styles/partials/utils";
+@use "@/styles/partials/mediaQuery";
+
+.guest-layout {
+    display: grid;
+    grid-template-areas:
+        "header photo"
+        "main photo"
+        "footer photo";
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+    grid-template-rows: 82px 1fr 66px;
+    column-gap: 12px;
+    min-height: 100vh;
+
+    @supports (height: 100dvh) {
+        min-height: 100dvh;
+    }
+
+    @include mediaQuery.maxCustomDevice(600) {
+        grid-template-areas:
+            "header"
+            "photo"
+            "main"
+            "footer";
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: 82px auto 1fr 66px;
+    }
+
+    &__header {
+        grid-area: header;
+    }
+
+    &__main {
+        grid-area: main;
+        padding: 48px 12px 44px;
+        @include utils.flex-container($jc: center);
+    }
+
+    &__footer {
+        grid-area: footer;
+    }
+
+    &__photo {
+        grid-area: photo;
+        padding: 10px;
+        background-color: var(--muted);
+        @include utils.flex-container($jc: center, $ai: center);
+    }
+}

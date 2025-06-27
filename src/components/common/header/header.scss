@@ -1,0 +1,8 @@
+@use "@/styles/partials/utils";
+
+.app-header{
+    @include utils.flex-container($ai: center);
+    padding: 0 12px;
+    height: calc(58px + 12px);
+    padding-inline: 12px;
+}
