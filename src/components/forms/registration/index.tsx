@@ -1,32 +1,52 @@
 "use client";
-import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import "./registration.scss";
 
-export interface RegistrationData {
-    email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-}
+const registrationSchema = z.object({
+    email: z.string().email("Invalid email address"),
+    password: z
+        .string()
+        .min(8, "Password must be at least 8 characters long")
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must include special characters"),
+    first_name: z.string().min(1, "First name is required"),
+    last_name: z.string().min(1, "Last name is required"),
+});
+
+export type RegistrationData = z.infer<typeof registrationSchema>;
 
 interface RegistrationFormProps {
-    onSubmit: (state: RegistrationData) => RegistrationData | Promise<RegistrationData>;
+    handleSubmit: (values: RegistrationData) => void | Promise<void>;
 }
 
-const initialRegistrationState: RegistrationData = {
-    email: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-};
-
-export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
-    const [state, formAction, isPending] = useActionState(onSubmit, initialRegistrationState);
+export default function RegistrationForm({ handleSubmit }: RegistrationFormProps) {
+    const form = useForm<z.infer<typeof registrationSchema>>({
+        resolver: zodResolver(registrationSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+            first_name: "",
+            last_name: "",
+        },
+    });
+    function onSubmit(values: RegistrationData) {
+        console.log(values);
+    }
     return (
         <section className="registration-form">
             <div className="px-2">
@@ -36,56 +56,98 @@ export default function RegistrationForm({ onSubmit }: RegistrationFormProps) {
                         Stream, host, and manage videos effortlessly!
                     </div>
                 </div>
-                <form className="mt-[25px] space-y-3">
-                    <div className="registration-form__input-group gap-y-2">
-                        <Label className="mb-[4px]">Full Name</Label>
-                        <div className="registration-form__input-combined">
-                            <Input
-                                type="text"
-                                id="first_name"
-                                name="first_name"
-                                placeholder="First name"
-                            />
-                            <Input
-                                type="text"
-                                id="last_name"
-                                name="last_name"
-                                placeholder="Last name"
+                <Form {...form}>
+                    <form className="mt-[25px] space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+                        <div className="registration-form__input-group gap-y-2">
+                            <Label className="mb-[4px]">Full Name</Label>
+                            <div className="registration-form__input-combined">
+                                <FormField
+                                    control={form.control}
+                                    name="first_name"
+                                    render={({ field }) => (
+                                        <FormItem className="registration-form__input-combined-item">
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="First name"
+                                                    className="rounded-r-none"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="last_name"
+                                    render={({ field }) => (
+                                        <FormItem className="registration-form__input-combined-item">
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Last name"
+                                                    className="rounded-l-none"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div className="registration-form__input-group gap-y-2">
+                            <Label className="mb-[4px]">Email Address</Label>
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="example@gmail.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
                             />
                         </div>
-                    </div>
-                    <div className="registration-form__input-group gap-y-2">
-                        <Label htmlFor="email" className="mb-[4px]">
-                            Email Address
-                        </Label>
-                        <Input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="example@gmail.com"
-                        />
-                    </div>
-                    <div className="registration-form__input-group gap-y-2">
-                        <Label htmlFor="email" className="mb-[4px]">
-                            Password
-                        </Label>
-                        <Input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="example@gmail.com"
-                        />
-                        <div className="text-[12px] leading-[16px] text-tertiary">
-                            Password must be 8+ chars & include special characters (e.g. @, #, $)
+                        <div className="registration-form__input-group gap-y-2">
+                            <Label className="mb-[4px]">Password</Label>
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="example@gmail.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription className="text-[12px] leading-[16px] text-tertiary">
+                                            Password must be 8+ chars & include special characters
+                                            (e.g. @, #, $)
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
-                    </div>
-                    <Button
-                        type="submit"
-                        className="registration-form__input__btn--register text-sm tracking-[-2%]"
-                    >
-                        Register
-                    </Button>
-                </form>
+                        <Button
+                            type="submit"
+                            className="registration-form__input__btn--register text-sm tracking-[-2%]"
+                            disabled={form.formState.isSubmitting}
+                        >
+                            Register
+                        </Button>
+                    </form>
+                </Form>
                 <div className="registration-form__input__oauth">
                     <div className="registration-form__input__oauth-text text-sm tracking-[-2%]">
                         or continue with

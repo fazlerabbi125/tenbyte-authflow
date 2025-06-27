@@ -12,19 +12,8 @@
         &-combined {
             @include utils.flex-container();
 
-            &>input {
-                border-radius: 0;
-
-                &:first-child {
-                    border-top-left-radius: calc(var(--radius) - 2px);
-                    border-bottom-left-radius: calc(var(--radius) - 2px);
-                }
-
-                &:last-child {
-                    border-top-right-radius: calc(var(--radius) - 2px);
-                    border-bottom-right-radius: calc(var(--radius) - 2px);
-
-                }
+            &-item {
+                @include utils.flex-container($direction: column);
             }
         }
 

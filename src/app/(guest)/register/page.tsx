@@ -1,12 +1,14 @@
 import React from "react";
 import RegistrationForm, { RegistrationData } from "@/components/forms/registration";
+import AxiosServices from "@/services/axios.service";
+import APIRoutes from "@/config/api-routes";
 
 export default function Page() {
-    async function handleRegistration(state: RegistrationData) {
+    async function handleRegistration(values: RegistrationData) {
         "use server";
-        // Handle registration logic here
-        return state;
+        const { data } = await AxiosServices.post(APIRoutes.register, values);
+        console.log("Registration successful:", data);
     }
 
-    return <RegistrationForm onSubmit={handleRegistration}/>;
+    return <RegistrationForm handleSubmit={handleRegistration} />;
 }
