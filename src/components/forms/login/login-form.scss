@@ -1,18 +1,10 @@
 @use "@/styles/partials/utils";
 
-.registration-form {
+.login-form {
     &__input {
         &-group {
             display: grid;
             grid-template-columns: minmax(250px, 1fr);
-        }
-
-        &-combined {
-            @include utils.flex-container();
-
-            &-item {
-                @include utils.flex-container($direction: column);
-            }
         }
 
         &__btn {
@@ -65,6 +57,4 @@
             }
         }
     }
-
-
 }
