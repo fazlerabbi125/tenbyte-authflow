@@ -10,7 +10,6 @@ export default function Page() {
     async function handleLogin(values: LoginData) {
         "use server";
         const { data } = await AxiosServices.post(APIRoutes.login, values);
-        console.log("Login values:", data);
         redirect(appRoutes.dashboard);
     }
     return (

@@ -8,12 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { LoginData, loginSchema } from "@/schemas/user.schema";
-import { Inter } from "next/font/google";
 import "./login-form.scss";
 
-const inter = Inter({
-    subsets: ["latin"],
-});
 interface LoginFormProps {
     loginHandler: (values: LoginData) => Promise<void>;
 }
@@ -105,15 +101,15 @@ export default function LoginForm({ loginHandler }: LoginFormProps) {
                 </div>
 
                 <div className="login-form__input__btn-group mt-[1rem] text-sm">
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/google-svg.svg"} alt="google" width={20} height={20} />
                         <span>Google</span>
                     </Button>
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/github-svg.svg"} alt="github" width={20} height={20} />
                         <span>Github</span>
                     </Button>
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/okta-svg.svg"} alt="okta" width={20} height={20} />
                         <span>Okta</span>
                     </Button>

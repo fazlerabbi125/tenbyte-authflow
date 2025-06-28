@@ -10,14 +10,13 @@ import Link from "next/link";
 export default function Page() {
     async function handleRegistration(values: RegistrationData) {
         "use server";
-        const { data } = await AxiosServices.post(APIRoutes.register, values);
-        console.log("Registration successful:", data);
+         const { data } = await AxiosServices.post(APIRoutes.register, values);
         redirect(appRoutes.dashboard);
     }
 
     return (
         <section className="flex justify-center items-center h-full">
-            <div className="px-2 max-w-[400px]">
+            <div className="px-2 max-w-[420px]">
                 <div className="space-y-2">
                     <h1 className="text-xl font-semibold">Get Started with Vidinfra</h1>
                     <div className="text-sm tracking-[-1%] text-secondary">

@@ -14,12 +14,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RegistrationData, registrationSchema } from "@/schemas/user.schema";
-import { Inter } from "next/font/google";
 import "./registration-form.scss";
-
-const inter = Inter({
-    subsets: ["latin"],
-});
 
 interface RegistrationFormProps {
     registrationHandler: (values: RegistrationData) => Promise<void>;
@@ -144,15 +139,15 @@ export default function RegistrationForm({ registrationHandler }: RegistrationFo
                 </div>
 
                 <div className="registration-form__input__btn-group mt-[1rem] text-sm">
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/google-svg.svg"} alt="google" width={20} height={20} />
                         <span>Google</span>
                     </Button>
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/github-svg.svg"} alt="github" width={20} height={20} />
                         <span>Github</span>
                     </Button>
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/okta-svg.svg"} alt="okta" width={20} height={20} />
                         <span>Okta</span>
                     </Button>
