@@ -14,4 +14,10 @@ export const registrationSchema = z.object({
     newsletter: z.boolean(),
 });
 
+export const loginSchema = z.object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(1, "Password is required"),
+});
+
 export type RegistrationData = z.infer<typeof registrationSchema>;
+export type LoginData = z.infer<typeof loginSchema>;
