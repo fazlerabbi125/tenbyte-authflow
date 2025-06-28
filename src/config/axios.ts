@@ -1,13 +1,12 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 
 export const axiosInstance = axios.create({
-    baseURL: process.env.BACKEND_URL,
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(function (config) {
-    config.headers.Authorization = `Bearer `;
+    // config.headers.Authorization = `Bearer `;
     return config;
 });
 

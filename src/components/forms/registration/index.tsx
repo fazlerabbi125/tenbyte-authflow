@@ -10,42 +10,36 @@ import {
     FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import "./registration.scss";
-
-const registrationSchema = z.object({
-    email: z.string().email("Invalid email address"),
-    password: z
-        .string()
-        .min(8, "Password must be at least 8 characters long")
-        .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must include special characters"),
-    first_name: z.string().min(1, "First name is required"),
-    last_name: z.string().min(1, "Last name is required"),
-});
-
-export type RegistrationData = z.infer<typeof registrationSchema>;
+import { appRoutes } from "@/config/app-routes";
+import { RegistrationData, registrationSchema } from "@/schemas/user.schema";
+import "./registration-form.scss";
 
 interface RegistrationFormProps {
-    handleSubmit: (values: RegistrationData) => void | Promise<void>;
+    handleSubmit: (values: RegistrationData) => Promise<void>;
 }
 
 export default function RegistrationForm({ handleSubmit }: RegistrationFormProps) {
-    const form = useForm<z.infer<typeof registrationSchema>>({
+    const form = useForm<RegistrationData>({
         resolver: zodResolver(registrationSchema),
         defaultValues: {
             email: "",
             password: "",
             first_name: "",
             last_name: "",
+            newsletter: true,
         },
     });
-    function onSubmit(values: RegistrationData) {
-        console.log(values);
+    async function onSubmit(data: RegistrationData) {
+        try{
+            await handleSubmit(data);
+            form.reset();
+        } catch (error) {
+            console.error("Registration error:", error);
+        }
     }
     return (
         <section className="registration-form">
@@ -181,7 +175,7 @@ export default function RegistrationForm({ handleSubmit }: RegistrationFormProps
                 <div>
                     <div className="text-sm text-center	tracking-[-1%] text-primary mt-6">
                         Already have an account?{" "}
-                        <Link href="/login" className="text-brand-300 underline">
+                        <Link href={appRoutes.login} className="text-brand-300 underline">
                             Login
                         </Link>
                     </div>
