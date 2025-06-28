@@ -14,13 +14,21 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { RegistrationData, registrationSchema } from "@/schemas/user.schema";
+import { useRouter } from "next/navigation";
 import "./registration-form.scss";
+import { useAuthStore } from "@/store/auth.store";
+import { toast } from "sonner";
 
 interface RegistrationFormProps {
-    registrationHandler: (values: RegistrationData) => Promise<void>;
+    registrationHandler: (values: RegistrationData) => Promise<{
+        access_token: string;
+        redirectUrl?: string;
+    }>;
 }
 
 export default function RegistrationForm({ registrationHandler }: RegistrationFormProps) {
+    const router = useRouter();
+    const setToken = useAuthStore((state) => state.setToken);
     const form = useForm<RegistrationData>({
         resolver: zodResolver(registrationSchema),
         defaultValues: {
@@ -33,10 +41,12 @@ export default function RegistrationForm({ registrationHandler }: RegistrationFo
     });
     async function onSubmit(data: RegistrationData) {
         try {
-            await registrationHandler(data);
+            const { access_token, redirectUrl } = await registrationHandler(data);
             form.reset();
-        } catch (error) {
-            console.error("Registration error:", error);
+            setToken(access_token);
+            if (redirectUrl) router.push(redirectUrl);
+        } catch (error: any) {
+            return toast(`Registration error: ${error.message}`);
         }
     }
     return (

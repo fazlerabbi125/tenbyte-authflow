@@ -7,15 +7,23 @@ import Image from "next/image";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { LoginData, loginSchema } from "@/schemas/user.schema";
 import "./login-form.scss";
+import { useAuthStore } from "@/store/auth.store";
+import { toast } from "sonner";
 
 interface LoginFormProps {
-    loginHandler: (values: LoginData) => Promise<void>;
+    loginHandler: (values: LoginData) => Promise<{
+        access_token: string;
+        redirectUrl?: string;
+    }>;
 }
 
 export default function LoginForm({ loginHandler }: LoginFormProps) {
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
+    const setToken = useAuthStore((state) => state.setToken);
     const form = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -26,10 +34,12 @@ export default function LoginForm({ loginHandler }: LoginFormProps) {
 
     async function onSubmit(data: LoginData) {
         try {
-            await loginHandler(data);
+            const { access_token, redirectUrl } = await loginHandler(data);
             form.reset();
-        } catch (error) {
-            console.error("Login error:", error);
+            setToken(access_token);
+            if (redirectUrl) router.push(redirectUrl);
+        } catch (error: any) {
+            return toast(`Login error: ${error.message}`);
         }
     }
 
