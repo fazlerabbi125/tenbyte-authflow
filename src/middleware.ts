@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getSession } from "./services/session.service";
+import { appRoutes } from "./config/app-routes";
 
-export function middleware(request: NextRequest) {
-    return NextResponse.next();
+export async function middleware(req: NextRequest) {
+    const res = NextResponse.next();
+    const { user } = await getSession();
+    if (!user && req.nextUrl.pathname === appRoutes.dashboard) {
+        return NextResponse.redirect(new URL("/403", req.url));
+    }
+    if (user && req.nextUrl.pathname in [appRoutes.login, appRoutes.register]) {
+        return NextResponse.redirect(new URL(appRoutes.dashboard, req.url));
+    }
+    return res;
 }
 
 export const config = {

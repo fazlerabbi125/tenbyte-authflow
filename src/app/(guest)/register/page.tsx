@@ -1,23 +1,31 @@
-import React from "react";
 import RegistrationForm from "@/components/forms/registration";
 import type { RegistrationData } from "@/schemas/user.schema";
 import AxiosServices from "@/services/axios.service";
 import APIRoutes from "@/config/api-routes";
-import { redirect } from "next/navigation";
 import { appRoutes } from "@/config/app-routes";
 import Link from "next/link";
+import type { LoginResponse } from "@/lib/response/auth";
+import { setSessionData } from "@/services/session.service";
 
 export default function Page() {
     async function handleRegistration(values: RegistrationData) {
         "use server";
-        const { data } = await AxiosServices.post(APIRoutes.register, values);
-        console.log("Registration successful:", data);
-        redirect(appRoutes.dashboard);
+        const {
+            data: { access_token, refresh_token, result },
+        } = await AxiosServices.post<LoginResponse>(APIRoutes.register, values);
+        await setSessionData({
+            refresh_token,
+            user: result,
+        });
+        return {
+            access_token,
+            redirectUrl: appRoutes.dashboard,
+        };
     }
 
     return (
         <section className="flex justify-center items-center h-full">
-            <div className="px-2 max-w-[400px]">
+            <div className="px-2 max-w-[420px]">
                 <div className="space-y-2">
                     <h1 className="text-xl font-semibold">Get Started with Vidinfra</h1>
                     <div className="text-sm tracking-[-1%] text-secondary">

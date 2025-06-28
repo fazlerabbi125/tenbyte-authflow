@@ -7,19 +7,23 @@ import Image from "next/image";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { LoginData, loginSchema } from "@/schemas/user.schema";
-import { Inter } from "next/font/google";
 import "./login-form.scss";
+import { useAuthStore } from "@/store/auth.store";
+import { toast } from "sonner";
 
-const inter = Inter({
-    subsets: ["latin"],
-});
 interface LoginFormProps {
-    loginHandler: (values: LoginData) => Promise<void>;
+    loginHandler: (values: LoginData) => Promise<{
+        access_token: string;
+        redirectUrl?: string;
+    }>;
 }
 
 export default function LoginForm({ loginHandler }: LoginFormProps) {
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
+    const setToken = useAuthStore((state) => state.setToken);
     const form = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -30,10 +34,12 @@ export default function LoginForm({ loginHandler }: LoginFormProps) {
 
     async function onSubmit(data: LoginData) {
         try {
-            await loginHandler(data);
+            const { access_token, redirectUrl } = await loginHandler(data);
             form.reset();
-        } catch (error) {
-            console.error("Login error:", error);
+            setToken(access_token);
+            if (redirectUrl) router.push(redirectUrl);
+        } catch (error: any) {
+            return toast(`Login error: ${error.message}`);
         }
     }
 
@@ -105,15 +111,15 @@ export default function LoginForm({ loginHandler }: LoginFormProps) {
                 </div>
 
                 <div className="login-form__input__btn-group mt-[1rem] text-sm">
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/google-svg.svg"} alt="google" width={20} height={20} />
                         <span>Google</span>
                     </Button>
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/github-svg.svg"} alt="github" width={20} height={20} />
                         <span>Github</span>
                     </Button>
-                    <Button className={inter.className}>
+                    <Button>
                         <Image src={"/images/okta-svg.svg"} alt="okta" width={20} height={20} />
                         <span>Okta</span>
                     </Button>

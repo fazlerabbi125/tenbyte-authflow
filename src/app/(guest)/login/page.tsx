@@ -1,17 +1,26 @@
 import LoginForm from "@/components/forms/login";
 import APIRoutes from "@/config/api-routes";
 import { appRoutes } from "@/config/app-routes";
-import { LoginData } from "@/schemas/user.schema";
+import type { LoginResponse } from "@/lib/response/auth";
+import type { LoginData } from "@/schemas/user.schema";
 import AxiosServices from "@/services/axios.service";
+import { setSessionData } from "@/services/session.service";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default function Page() {
     async function handleLogin(values: LoginData) {
         "use server";
-        const { data } = await AxiosServices.post(APIRoutes.login, values);
-        console.log("Login values:", data);
-        redirect(appRoutes.dashboard);
+        const {
+            data: { access_token, refresh_token, result },
+        } = await AxiosServices.post<LoginResponse>(APIRoutes.login, values);
+        await setSessionData({
+            refresh_token,
+            user: result,
+        });
+        return {
+            access_token,
+            redirectUrl: appRoutes.dashboard,
+        };
     }
     return (
         <section className="flex justify-center pt-[7.5%]">
