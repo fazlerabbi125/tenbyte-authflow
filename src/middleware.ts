@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getSession } from "./services/session.service";
 import { appRoutes } from "./config/app-routes";
+import { getSessionData } from "./services/session.service";
 
 export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
-    const { user } = await getSession();
+    const { user } = await getSessionData({ res, req });
     if (!user && req.nextUrl.pathname === appRoutes.dashboard) {
         return NextResponse.redirect(new URL("/403", req.url));
     }

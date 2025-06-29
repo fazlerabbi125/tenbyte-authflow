@@ -1,3 +1,4 @@
+import { createStore } from "zustand/vanilla";
 import { create } from "zustand";
 
 export interface User {
@@ -46,13 +47,13 @@ export type Session =
           refresh_token: undefined;
       };
 
-export interface AuthState {
+export interface AuthStore {
     access_token?: string;
     setToken: (access_token: string) => void;
     clearToken: () => void;
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
+export const useAuthStore = create<AuthStore>()((set) => ({
     access_token: undefined,
     setToken: (access_token: string) => set({ access_token }),
     clearToken: () => set({ access_token: undefined }),
