@@ -6,7 +6,6 @@ import { RefreshResponse } from "@/lib/response/auth";
 
 export const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-    withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(function (config) {
