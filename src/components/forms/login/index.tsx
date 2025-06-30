@@ -8,10 +8,10 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { LoginData, loginSchema } from "@/schemas/user.schema";
-import "./login-form.scss";
+import { loginSchema, type LoginData } from "@/schemas/user.schema";
 import { useAuthStore } from "@/store/auth.store";
 import { toast } from "sonner";
+import "./login-form.scss";
 
 interface LoginFormProps {
     loginHandler: (values: LoginData) => Promise<{

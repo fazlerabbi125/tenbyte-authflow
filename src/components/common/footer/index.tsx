@@ -1,5 +1,5 @@
 import React from "react";
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 import "./footer.scss";
 
 interface FooterProps {
@@ -8,7 +8,7 @@ interface FooterProps {
 
 export default function Footer({ containerClassName }: FooterProps) {
     return (
-        <footer className={clsx("app-footer",containerClassName)}>
+        <footer className={cn("app-footer",containerClassName)}>
             <div className="text-xs text-secondary">By signing in, you agree to our <span className="font-medium underline font-medium text-primary">Privacy Policy</span> and <span className="font-medium underline font-medium text-primary">Terms of Use</span></div>
         </footer>
     );

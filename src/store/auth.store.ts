@@ -1,4 +1,3 @@
-import { createStore } from "zustand/vanilla";
 import { create } from "zustand";
 
 export interface User {

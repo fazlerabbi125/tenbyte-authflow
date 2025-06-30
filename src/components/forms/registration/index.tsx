@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { RegistrationData, registrationSchema } from "@/schemas/user.schema";
+import { registrationSchema, type RegistrationData } from "@/schemas/user.schema";
 import { useRouter } from "next/navigation";
-import "./registration-form.scss";
 import { useAuthStore } from "@/store/auth.store";
 import { toast } from "sonner";
+import "./registration-form.scss";
 
 interface RegistrationFormProps {
     registrationHandler: (values: RegistrationData) => Promise<{

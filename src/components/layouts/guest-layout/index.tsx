@@ -1,10 +1,10 @@
-import React from "react";
+import { ReactNode } from "react";
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import Image from "next/image";
 import "./guest.layout.scss";
 
-export default function GuestLayout({ children }: { children: React.ReactNode }) {
+export default function GuestLayout({ children }: { children: ReactNode }) {
     return (
         <div className="guest-layout">
             <Header containerClassName="guest-layout__header" />
