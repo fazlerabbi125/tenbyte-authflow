@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { createJSONStorage, devtools, persist, StateStorage } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 export interface User {
     first_name: string;
@@ -46,14 +48,52 @@ export type Session =
           refresh_token: undefined;
       };
 
-export interface AuthStore {
+export interface AuthState {
     access_token?: string;
+}
+
+export interface AuthActions {
     setToken: (access_token: string) => void;
     clearToken: () => void;
 }
+export type AuthStore = AuthState & AuthActions;
 
-export const useAuthStore = create<AuthStore>()((set) => ({
-    access_token: undefined,
-    setToken: (access_token: string) => set({ access_token }),
-    clearToken: () => set({ access_token: undefined }),
-}));
+function createPersistStorage(): StateStorage {
+    if (typeof window !== "undefined") return localStorage;
+    return {
+        async getItem(name) {
+            return Promise.resolve(null);
+        },
+        async setItem(name, value) {
+            return Promise.resolve();
+        },
+        async removeItem(name) {
+            return Promise.resolve();
+        },
+    };
+}
+
+export const useAuthStore = create<AuthStore>()(
+    devtools(
+        immer(
+            // simplifies handling of immutable data structures (especially useful for nested objects)
+            persist(
+                (set) => ({
+                    access_token: undefined,
+                    setToken: (access_token: string) =>
+                        set((state) => {
+                            state.access_token = access_token;
+                        }),
+                    clearToken: () =>
+                        set((state) => {
+                            state.access_token = undefined;
+                        }),
+                }),
+                {
+                    name: "auth-store",
+                    storage: createJSONStorage(createPersistStorage),
+                }
+            )
+        )
+    )
+);

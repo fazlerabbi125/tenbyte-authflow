@@ -1,19 +1,31 @@
 import type { User as AppUser } from "../store/auth.store";
+import "next-auth";
+import "next-auth/jwt";
 
 declare module "next-auth" {
-    interface Session {
-        user: AppUser;
+    /**
+     * The returned data from the authorize method
+     * This is data we extract from our own backend JWT tokens.
+     */
+    export interface User {
         refresh_token: string;
+        userInfo: AppUser;
     }
 
-    interface User extends AppUser {
+    /**
+     * Returned by `useSession`, `getSession`, returned by the `session`
+     * callback and also the shape received as a prop on the SessionProvider
+     * React Context
+     */
+    export interface Session {
         refresh_token: string;
+        userInfo: AppUser;
     }
 }
 
 declare module "next-auth/jwt" {
-    interface JWT {
-        user?: AppUser;
-        refresh_token?: string;
+    export interface JWT {
+        refresh_token: string;
+        userInfo: AppUser;
     }
 }

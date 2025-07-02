@@ -35,17 +35,15 @@ export const { auth, signIn, signOut, unstable_update } = NextAuth({
         },
         jwt({ token, user, trigger, session }) {
             console.log({ user, token });
-            if (user) {
-                token.user = user;
-                token.refresh_token = user.refresh_token;
-            }
+            token.refresh_token = user.refresh_token;
+            token.userInfo = user.userInfo;
             return token;
         },
         session({ token, session, user }) {
             console.log({ token, user, session });
-            if (token.user && token.refresh_token) {
-                (session as any).user = token.user;
-                (session as any).refresh_token = token.refresh_token;
+            if (token.userInfo && token.refresh_token) {
+                session.userInfo = token.userInfo;
+                session.refresh_token = token.refresh_token;
             }
             return session;
         },
@@ -64,7 +62,7 @@ export const { auth, signIn, signOut, unstable_update } = NextAuth({
                         email,
                         password,
                     });
-                    return { access_token, refresh_token, ...result };
+                    return { access_token, refresh_token, userInfo: result };
                 } catch (error) {
                     console.error("Login error:", error);
                     return null;
