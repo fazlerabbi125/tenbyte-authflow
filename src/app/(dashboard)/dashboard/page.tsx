@@ -1,4 +1,4 @@
-import type { Profile } from "@/store/auth.store";
+import type { Profile } from "@/store/auth.slice";
 import AxiosServices from "@/services/axios.service";
 import APIRoutes from "@/config/api-routes";
 

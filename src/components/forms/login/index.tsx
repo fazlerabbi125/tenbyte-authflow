@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { loginSchema, type LoginData } from "@/schemas/user.schema";
-import { useAuthStore } from "@/store/auth.store";
+import { useLSStore } from "@/store";
 import { toast } from "sonner";
 import "./login-form.scss";
 
@@ -23,7 +23,7 @@ interface LoginFormProps {
 export default function LoginForm({ loginHandler }: LoginFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
-    const setToken = useAuthStore((state) => state.setToken);
+    const setToken = useLSStore((state) => state.setToken);
     const form = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {

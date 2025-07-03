@@ -1,4 +1,4 @@
-import { User } from "@/store/auth.store";
+import { User } from "@/store/auth.slice";
 import { CommonSuccessAttrs } from "./common";
 
 export interface LoginResponse extends CommonSuccessAttrs {

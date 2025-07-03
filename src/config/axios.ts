@@ -1,5 +1,5 @@
 import { deleteSession, getSessionData, setSessionData } from "@/services/session.service";
-import { useAuthStore } from "@/store/auth.store";
+import { useLSStore } from "@/store";
 import axios, { AxiosError, HttpStatusCode } from "axios";
 import APIRoutes from "./api-routes";
 import type { RefreshResponse } from "@/lib/response/auth";
@@ -9,7 +9,7 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(function (config) {
-    const access_token = useAuthStore.getState().access_token;
+    const access_token = useLSStore.getState().access_token;
     if (access_token) {
         config.headers.Authorization = `Bearer ${access_token}`;
     }
@@ -21,7 +21,7 @@ axiosInstance.interceptors.response.use(
     async function (error: AxiosError) {
         const prevRequest = error.config;
         const { refresh_token: oldRefreshToken } = await getSessionData();
-        const authStore = useAuthStore.getState();
+        const authStore = useLSStore.getState();
         if (error.status === HttpStatusCode.Unauthorized && oldRefreshToken && prevRequest) {
             try {
                 const {

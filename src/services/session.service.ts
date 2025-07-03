@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { sessionCookieConfig } from "@/config/session";
-import type { Session } from "@/store/auth.store";
+import type { Session } from "@/store/auth.slice";
 import type { NextRequest, NextResponse } from "next/server";
 import { deleteCookie, getCookie, OptionsType, setCookie } from "cookies-next";
 

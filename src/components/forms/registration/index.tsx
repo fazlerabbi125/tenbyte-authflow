@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { registrationSchema, type RegistrationData } from "@/schemas/user.schema";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/auth.store";
+import { useLSStore } from "@/store";
 import { toast } from "sonner";
 import "./registration-form.scss";
 
@@ -28,7 +28,7 @@ interface RegistrationFormProps {
 
 export default function RegistrationForm({ registrationHandler }: RegistrationFormProps) {
     const router = useRouter();
-    const setToken = useAuthStore((state) => state.setToken);
+    const setToken = useLSStore((state) => state.setToken);
     const form = useForm<RegistrationData>({
         resolver: zodResolver(registrationSchema),
         defaultValues: {

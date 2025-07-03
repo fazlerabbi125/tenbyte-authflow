@@ -1,4 +1,4 @@
-import type { User as AppUser } from "../store/auth.store";
+import type { User as AppUser } from "../store/auth.slice";
 import "next-auth";
 import "next-auth/jwt";
 
