@@ -4,9 +4,6 @@ import APIRoutes from "@/config/api-routes";
 import { AxiosError } from "axios";
 import DashboardClient from "./client";
 import { deleteSession } from "@/services/session.service";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
-import { appRoutes } from "@/config/app-routes";
 
 export default async function Page() {
     let profile: Profile | undefined;
@@ -21,15 +18,8 @@ export default async function Page() {
 
     async function logOutUser() {
         "use server";
-        try {
-            await AxiosServices.post(APIRoutes.logout);
-            await deleteSession();
-            redirect(appRoutes.login);
-        } catch (error: any) {
-            toast.error(
-                (error instanceof AxiosError && error.response?.data?.message) || error.message
-            );
-        }
+        await AxiosServices.post(APIRoutes.logout);
+        await deleteSession();
     }
     return (
         <section className="p-4">
@@ -37,7 +27,7 @@ export default async function Page() {
                 Welcome to your dashboard,{" "}
                 {[profile?.first_name, profile?.last_name].filter((elem) => elem).join(" ")}
             </div>
-            <DashboardClient logout={logOutUser}/>
+            <DashboardClient handleLogout={logOutUser} />
         </section>
     );
 }
