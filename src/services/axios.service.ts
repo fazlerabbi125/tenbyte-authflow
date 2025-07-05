@@ -12,7 +12,7 @@ const AxiosServices = {
         D = any,
         B extends Record<string, any> = object,
         C extends AxiosRequestConfig = AxiosRequestConfig<any>
-    >(url: string, body: B, config?: C) {
+    >(url: string, body?: B, config?: C) {
         return apiAxios.post<D>(url, body, config);
     },
     update: async function <

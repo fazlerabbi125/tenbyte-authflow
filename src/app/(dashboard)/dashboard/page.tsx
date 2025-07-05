@@ -4,13 +4,15 @@ import APIRoutes from "@/config/api-routes";
 import { AxiosError } from "axios";
 import DashboardClient from "./client";
 import { deleteSession } from "@/services/session.service";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { appRoutes } from "@/config/app-routes";
 
 export default async function Page() {
     let profile: Profile | undefined;
     let error = "";
     try {
         const { data } = await AxiosServices.get<{ result: Profile }>(APIRoutes.profile);
-        console.log(data);
         profile = data.result;
     } catch (err: any) {
         error = (err instanceof AxiosError && err.response?.data?.message) || err.message;
@@ -19,11 +21,19 @@ export default async function Page() {
 
     async function logOutUser() {
         "use server";
-        await deleteSession();
+        try {
+            await AxiosServices.post(APIRoutes.logout);
+            await deleteSession();
+            redirect(appRoutes.login);
+        } catch (error: any) {
+            toast.error(
+                (error instanceof AxiosError && error.response?.data?.message) || error.message
+            );
+        }
     }
     return (
         <section className="p-4">
-            <div>
+            <div className="mb-2">
                 Welcome to your dashboard,{" "}
                 {[profile?.first_name, profile?.last_name].filter((elem) => elem).join(" ")}
             </div>

@@ -40,7 +40,7 @@ apiAxios.interceptors.response.use(
                 const {
                     data: { access_token },
                 } = await axios.post<RefreshResponse>(
-                    // Next.js api route used as proxy/middle layer
+                    // Next.js api route used as proxy/forwarding layer
                     process.env.NEXT_PUBLIC_APP_URL + APIRoutes.refreshToken,
                     {
                         oldRefreshToken,
