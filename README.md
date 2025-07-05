@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Instructions
 
-1. Install dependencies from package.json (e.g. npm install)
+1. Install dependencies from package.json (i.e. npm install)
 2. As per the .env.example file, specify values for:
     * NEXT_PUBLIC_BACKEND_URL= The url to your server
     * NEXT_PUBLIC_SESSION_COOKIE= The name of your session cookie
