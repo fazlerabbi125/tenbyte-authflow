@@ -1,43 +1,43 @@
-"use client";
-import type { Profile } from "@/store/auth.store";
-import { useEffect, useState } from "react";
-import { logOutUser } from "./action";
-import { Button } from "@/components/ui/button";
+import type { Profile } from "@/store/auth.slice";
 import AxiosServices from "@/services/axios.service";
 import APIRoutes from "@/config/api-routes";
+import { AxiosError } from "axios";
+import DashboardClient from "./client";
+import { deleteSession } from "@/services/session.service";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+import { appRoutes } from "@/config/app-routes";
 
-export default function Page() {
-    const [profile, setProfile] = useState<Profile | undefined>();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
-    useEffect(() => {
-        let timeout: boolean = false;
-        const loadData = async () => {
-            if (timeout) return;
-            try {
-                setIsLoading(true);
-                setError("");
-                const { data } = await AxiosServices.get<Profile>(APIRoutes.profile);
-                setProfile(data);
-            } catch (error: any) {
-                setError(error.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        loadData();
-        return () => {
-            timeout = true;
-        };
-    }, []);
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+export default async function Page() {
+    let profile: Profile | undefined;
+    let error = "";
+    try {
+        const { data } = await AxiosServices.get<{ result: Profile }>(APIRoutes.profile);
+        profile = data.result;
+    } catch (err: any) {
+        error = (err instanceof AxiosError && err.response?.data?.message) || err.message;
+    }
+    if (error) return <div className="p-4">{error}</div>;
+
+    async function logOutUser() {
+        "use server";
+        try {
+            await AxiosServices.post(APIRoutes.logout);
+            await deleteSession();
+            redirect(appRoutes.login);
+        } catch (error: any) {
+            toast.error(
+                (error instanceof AxiosError && error.response?.data?.message) || error.message
+            );
+        }
+    }
     return (
-        <section>
-            <div>Welcome to your dashboard, {profile?.first_name || ""}</div>
-            <Button className="text-white bg-red-500" onClick={() => logOutUser()}>
-                Logout
-            </Button>
+        <section className="p-4">
+            <div className="mb-2">
+                Welcome to your dashboard,{" "}
+                {[profile?.first_name, profile?.last_name].filter((elem) => elem).join(" ")}
+            </div>
+            <DashboardClient logout={logOutUser}/>
         </section>
     );
 }

@@ -1,4 +1,6 @@
-import { create } from "zustand";
+import { create, StateCreator } from "zustand";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 export interface User {
     first_name: string;
@@ -48,12 +50,24 @@ export type Session =
 
 export interface AuthState {
     access_token?: string;
+}
+
+export interface AuthSlice {
+    access_token?: string;
     setToken: (access_token: string) => void;
     clearToken: () => void;
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
-    access_token: undefined,
-    setToken: (access_token: string) => set({ access_token }),
-    clearToken: () => set({ access_token: undefined }),
-}));
+export const createAuthSlice: StateCreator<AuthSlice, [["zustand/immer", never]], [], AuthSlice> =
+    // simplifies handling of immutable data structures (especially useful for nested objects)
+    (set) => ({
+        access_token: undefined,
+        setToken: (access_token: string) =>
+            set((state) => {
+                state.access_token = access_token;
+            }),
+        clearToken: () =>
+            set((state) => {
+                state.access_token = undefined;
+            }),
+    });

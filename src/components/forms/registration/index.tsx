@@ -13,11 +13,12 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { RegistrationData, registrationSchema } from "@/schemas/user.schema";
+import { registrationSchema, type RegistrationData } from "@/schemas/user.schema";
 import { useRouter } from "next/navigation";
-import "./registration-form.scss";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/store";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
+import "./registration-form.scss";
 
 interface RegistrationFormProps {
     registrationHandler: (values: RegistrationData) => Promise<{
@@ -46,7 +47,11 @@ export default function RegistrationForm({ registrationHandler }: RegistrationFo
             setToken(access_token);
             if (redirectUrl) router.push(redirectUrl);
         } catch (error: any) {
-            return toast(`Registration error: ${error.message}`);
+            return toast.error(
+                `Registration error: ${
+                    (error instanceof AxiosError && error.response?.data?.message) || error.message
+                }`
+            );
         }
     }
     return (

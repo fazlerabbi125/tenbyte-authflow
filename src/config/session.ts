@@ -1,10 +1,11 @@
-import type { SessionOptions } from "iron-session";
-
-export const sessionCookieOptions: SessionOptions = {
+interface SessionCookieConfig {
+    cookieName: string;
+    cookieOptions?: Cookies.CookieAttributes;
+}
+export const sessionCookieConfig: SessionCookieConfig = {
     cookieName: process.env.NEXT_PUBLIC_SESSION_COOKIE || "tenbyte-authflow-session",
-    password: process.env.NEXT_PUBLIC_SESSION_KEY || "",
     cookieOptions: {
-        // secure: true,
+        secure: true,
         // httpOnly: true,
     },
 };

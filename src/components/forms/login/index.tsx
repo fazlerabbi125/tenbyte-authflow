@@ -8,10 +8,11 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { LoginData, loginSchema } from "@/schemas/user.schema";
-import "./login-form.scss";
-import { useAuthStore } from "@/store/auth.store";
+import { loginSchema, type LoginData } from "@/schemas/user.schema";
+import { useAuthStore } from "@/store";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
+import "./login-form.scss";
 
 interface LoginFormProps {
     loginHandler: (values: LoginData) => Promise<{
@@ -39,7 +40,11 @@ export default function LoginForm({ loginHandler }: LoginFormProps) {
             setToken(access_token);
             if (redirectUrl) router.push(redirectUrl);
         } catch (error: any) {
-            return toast(`Login error: ${error.message}`);
+            return toast.error(
+                `Login error: ${
+                    (error instanceof AxiosError && error.response?.data?.message) || error.message
+                }`
+            );
         }
     }
 

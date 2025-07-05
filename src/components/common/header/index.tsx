@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 import "./header.scss";
 
 interface HeaderProps {
@@ -9,7 +9,7 @@ interface HeaderProps {
 
 export default function Header({ containerClassName }: HeaderProps) {
     return (
-        <header className={clsx('app-header',containerClassName)}>
+        <header className={cn('app-header',containerClassName)}>
             <Image
                 src="/images/company-logo-svg.svg"
                 alt="TenByte Logo"
