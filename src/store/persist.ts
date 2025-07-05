@@ -14,3 +14,18 @@ export function createPersistLocalStorage(): StateStorage {
         },
     };
 }
+
+export const createMemoryStorage = (): StateStorage => {
+    const obj: Record<string, string> = {};
+    return {
+        async getItem(name) {
+            return JSON.parse(obj[name] || "null");
+        },
+        async setItem(name, value) {
+            obj[name] = value;
+        },
+        async removeItem(name) {
+            delete obj[name];
+        },
+    };
+};

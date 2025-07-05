@@ -9,8 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { loginSchema, type LoginData } from "@/schemas/user.schema";
-import { useLSStore } from "@/store";
+import { useAuthStore } from "@/store";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 import "./login-form.scss";
 
 interface LoginFormProps {
@@ -23,7 +24,7 @@ interface LoginFormProps {
 export default function LoginForm({ loginHandler }: LoginFormProps) {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
-    const setToken = useLSStore((state) => state.setToken);
+    const setToken = useAuthStore((state) => state.setToken);
     const form = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -39,7 +40,11 @@ export default function LoginForm({ loginHandler }: LoginFormProps) {
             setToken(access_token);
             if (redirectUrl) router.push(redirectUrl);
         } catch (error: any) {
-            return toast(`Login error: ${error.message}`);
+            return toast.error(
+                `Login error: ${
+                    (error instanceof AxiosError && error.response?.data?.message) || error.message
+                }`
+            );
         }
     }
 

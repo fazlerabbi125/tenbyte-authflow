@@ -1,32 +1,32 @@
 import { AxiosRequestConfig } from "axios";
-import { axiosInstance } from "@/config/axios";
+import { apiAxios } from "@/config/axios";
 
 const AxiosServices = {
     get: async function <D = any, C extends AxiosRequestConfig = AxiosRequestConfig<any>>(
         url: string,
         config?: C
     ) {
-        return axiosInstance.get<D>(url, config);
+        return apiAxios.get<D>(url, config);
     },
     post: async function <
         D = any,
         B extends Record<string, any> = object,
         C extends AxiosRequestConfig = AxiosRequestConfig<any>
     >(url: string, body: B, config?: C) {
-        return axiosInstance.post<D>(url, body, config);
+        return apiAxios.post<D>(url, body, config);
     },
     update: async function <
         D = any,
         B extends Record<string, any> = object,
         C extends AxiosRequestConfig = AxiosRequestConfig<any>
     >(url: string, body: B, config?: C) {
-        return axiosInstance.patch<D>(url, body, config);
+        return apiAxios.patch<D>(url, body, config);
     },
     delete: async function <D = any, C extends AxiosRequestConfig = AxiosRequestConfig<any>>(
         url: string,
         config?: C
     ) {
-        return axiosInstance.delete<D>(url, config);
+        return apiAxios.delete<D>(url, config);
     },
 };
 

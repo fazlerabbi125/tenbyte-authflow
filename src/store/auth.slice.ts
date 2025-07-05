@@ -58,7 +58,7 @@ export interface AuthSlice {
     clearToken: () => void;
 }
 
-export const createAuthSlice: StateCreator<AuthSlice, [], [["zustand/immer", never]]> = immer(
+export const createAuthSlice: StateCreator<AuthSlice, [["zustand/immer", never]], [], AuthSlice> =
     // simplifies handling of immutable data structures (especially useful for nested objects)
     (set) => ({
         access_token: undefined,
@@ -70,5 +70,4 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [["zustand/immer", nev
             set((state) => {
                 state.access_token = undefined;
             }),
-    })
-);
+    });

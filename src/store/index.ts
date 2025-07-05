@@ -1,18 +1,20 @@
 import { create } from "zustand";
 import { AuthSlice, createAuthSlice } from "./auth.slice";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import { createPersistLocalStorage } from "./persist";
+import { devtools } from "zustand/middleware";
+// import { createJSONStorage, persist } from "zustand/middleware";
+// import { createPersistLocalStorage } from "./persist";
+import { immer } from "zustand/middleware/immer";
 
-export const useLSStore = create<AuthSlice>()(
+export const useAuthStore = create<AuthSlice>()(
     devtools(
-        persist(
-            (...a) => ({
-                ...createAuthSlice(...a),
-            }),
-            {
-                name: "zustand-persist-local",
-                storage: createJSONStorage(createPersistLocalStorage),
-            }
-        )
+        // persist(
+        immer((...a) => ({
+            ...createAuthSlice(...a),
+        }))
+        //     {
+        //         name: "zustand-persist-local",
+        //         storage: createJSONStorage(createPersistLocalStorage),
+        //     }
+        // )
     )
 );

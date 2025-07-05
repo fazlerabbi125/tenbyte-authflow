@@ -5,7 +5,7 @@ interface SessionCookieConfig {
 export const sessionCookieConfig: SessionCookieConfig = {
     cookieName: process.env.NEXT_PUBLIC_SESSION_COOKIE || "tenbyte-authflow-session",
     cookieOptions: {
-        // secure: true,
+        secure: true,
         // httpOnly: true,
     },
 };
