@@ -1,7 +1,7 @@
 import LoginForm from "@/components/forms/login";
 import APIRoutes from "@/config/api-routes";
 import { appRoutes } from "@/config/app-routes";
-import type { LoginResponse } from "@/lib/response/auth";
+import type { LoginResponse } from "@/lib/types/response/auth.res";
 import type { LoginData } from "@/schemas/user.schema";
 import AxiosServices from "@/services/axios.service";
 import { setSessionData } from "@/services/session.service";
