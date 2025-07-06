@@ -1,5 +1,5 @@
 import { User } from "@/store/auth.slice";
-import { CommonSuccessAttrs } from "./common";
+import { CommonSuccessAttrs } from "./common.res";
 
 export interface LoginResponse extends CommonSuccessAttrs {
     access_token: string;
