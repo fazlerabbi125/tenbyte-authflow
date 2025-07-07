@@ -1,6 +1,5 @@
-import { create, StateCreator } from "zustand";
-import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { StateCreator } from "zustand";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 export interface User {
     first_name: string;
@@ -48,19 +47,17 @@ export type Session =
           refresh_token: undefined;
       };
 
-export interface AuthState {
-    access_token?: string;
-}
-
 export interface AuthSlice {
     access_token?: string;
     setToken: (access_token: string) => void;
     clearToken: () => void;
+    isTokenExpired: () => boolean;
+    getTokenPayload: () => JwtPayload | null;
 }
 
 export const createAuthSlice: StateCreator<AuthSlice, [["zustand/immer", never]], [], AuthSlice> =
     // simplifies handling of immutable data structures (especially useful for nested objects)
-    (set) => ({
+    (set, get) => ({
         access_token: undefined,
         setToken: (access_token: string) =>
             set((state) => {
@@ -70,4 +67,19 @@ export const createAuthSlice: StateCreator<AuthSlice, [["zustand/immer", never]]
             set((state) => {
                 state.access_token = undefined;
             }),
+        isTokenExpired: () => {
+            const payload = get().getTokenPayload();
+            if (!payload) return true;
+            return payload.exp ? payload.exp * 1000 < Date.now() : true;
+        },
+        getTokenPayload: () => {
+            const token = get().access_token;
+            if (!token) return null;
+
+            try {
+                return jwtDecode(token);
+            } catch {
+                return null;
+            }
+        },
     });

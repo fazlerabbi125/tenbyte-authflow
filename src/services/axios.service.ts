@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import { apiAxios } from "@/config/axios";
+import { apiAxios } from "@/config/axios.config";
 
 const AxiosServices = {
     get: async function <D = any, C extends AxiosRequestConfig = AxiosRequestConfig<any>>(
