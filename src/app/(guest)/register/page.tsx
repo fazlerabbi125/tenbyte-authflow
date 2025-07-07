@@ -4,7 +4,7 @@ import AxiosServices from "@/services/axios.service";
 import APIRoutes from "@/config/api-routes";
 import { appRoutes } from "@/config/app-routes";
 import Link from "next/link";
-import type { LoginResponse } from "@/lib/response/auth";
+import type { LoginResponse } from "@/lib/types/response/auth.res";
 import { setSessionData } from "@/services/session.service";
 
 export default function Page() {

@@ -11,7 +11,7 @@ export const useAuthStore = create<AuthSlice>()(
         immer((...a) => ({
             ...createAuthSlice(...a),
         }))
-        //     {
+        //,     {
         //         name: "zustand-persist-local",
         //         storage: createJSONStorage(createPersistLocalStorage),
         //     }

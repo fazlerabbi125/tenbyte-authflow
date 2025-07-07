@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import APIRoutes from "@/config/api-routes";
-import type { RefreshResponse } from "@/lib/response/auth";
+import type { RefreshResponse } from "@/lib/types/response/auth.res";
 import AxiosServices from "@/services/axios.service";
 import { AxiosError, HttpStatusCode } from "axios";
 import { deleteSession, setSessionData } from "@/services/session.service";

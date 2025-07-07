@@ -2,7 +2,7 @@ import { getSessionData } from "@/services/session.service";
 import { useAuthStore } from "@/store";
 import axios, { AxiosError, HttpStatusCode } from "axios";
 import APIRoutes from "./api-routes";
-import type { RefreshResponse } from "@/lib/response/auth";
+import type { RefreshResponse } from "@/lib/types/response/auth.res";
 
 declare module "axios" {
     export interface InternalAxiosRequestConfig {
@@ -47,7 +47,6 @@ apiAxios.interceptors.response.use(
                     }
                 );
                 authStore.setToken(access_token);
-                prevRequest.headers["Authorization"] = `Bearer ${access_token}`;
                 return apiAxios(prevRequest);
             } catch (err) {
                 authStore.clearToken();
