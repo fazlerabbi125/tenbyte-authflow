@@ -3,7 +3,7 @@ import AxiosServices from "@/services/axios.service";
 import APIRoutes from "@/config/api-routes";
 import { AxiosError } from "axios";
 import DashboardClient from "./client";
-import { deleteSession } from "@/services/session.service";
+import { signOut } from "@/auth";
 
 export default async function Page() {
     let profile: Profile | undefined;
@@ -14,19 +14,21 @@ export default async function Page() {
     } catch (err: any) {
         error = (err instanceof AxiosError && err.response?.data?.message) || err.message;
     }
-    if (error) return <div className="p-4">{error}</div>;
-
     async function logOutUser() {
         "use server";
         await AxiosServices.post(APIRoutes.logout);
-        await deleteSession();
+        await signOut({ redirect: false });
     }
     return (
         <section className="p-4">
-            <div className="mb-2">
-                Welcome to your dashboard,{" "}
-                {[profile?.first_name, profile?.last_name].filter((elem) => elem).join(" ")}
-            </div>
+            {error ? (
+                <div>{error}</div>
+            ) : (
+                <div className="mb-2">
+                    Welcome to your dashboard,{" "}
+                    {[profile?.first_name, profile?.last_name].filter((elem) => elem).join(" ")}
+                </div>
+            )}
             <DashboardClient handleLogout={logOutUser} />
         </section>
     );

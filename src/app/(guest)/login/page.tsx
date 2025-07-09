@@ -1,3 +1,4 @@
+import { signIn } from "@/auth";
 import LoginForm from "@/components/forms/login";
 import APIRoutes from "@/config/api-routes";
 import { appRoutes } from "@/config/app-routes";
@@ -10,15 +11,16 @@ import Link from "next/link";
 export default function Page() {
     async function handleLogin(values: LoginData) {
         "use server";
-        const {
-            data: { access_token, refresh_token, result },
-        } = await AxiosServices.post<LoginResponse>(APIRoutes.login, values);
-        await setSessionData({
-            refresh_token,
-            user: result,
-        });
+        // returns url
+        await signIn("login", {...values, redirect: false});
+        // const {
+        //     data: { access_token, refresh_token, result },
+        // } = await AxiosServices.post<LoginResponse>(APIRoutes.login, values);
+        // await setSessionData({
+        //     refresh_token,
+        //     user: result,
+        // });
         return {
-            access_token,
             redirectUrl: appRoutes.dashboard,
         };
     }

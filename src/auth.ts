@@ -6,6 +6,11 @@ import type { LoginResponse } from "./lib/types/response/auth.res";
 import APIRoutes from "./config/api-routes";
 import { nextAuthConfig } from "./config/next-auth.config";
 
+/**
+ *  handlers from NextAuth must be used if you want to use default NextAuth pages or
+ *  to use session in the client-side via built-in SessionProvider and useSession hook
+ *  https://authjs.dev/getting-started/installation
+ */
 export const { auth, signIn, signOut, unstable_update } = NextAuth({
     ...nextAuthConfig,
     providers: [

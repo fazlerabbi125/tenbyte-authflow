@@ -1,19 +1,24 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { appRoutes } from "./config/app-routes";
-import { getSessionData } from "./services/session.service";
+// import { NextResponse } from "next/server";
+// import type { NextRequest } from "next/server";
+// import { appRoutes } from "./config/app-routes";
+// import { getSessionData } from "./services/session.service";
+import NextAuth from "next-auth";
+import { nextAuthConfig } from "./config/next-auth.config";
 
-export async function middleware(req: NextRequest) {
-    const res = NextResponse.next();
-    const { user } = await getSessionData({ res, req });
-    if (!user && req.nextUrl.pathname === appRoutes.dashboard) {
-        return NextResponse.redirect(new URL("/403", req.url));
-    }
-    if (user && req.nextUrl.pathname in [appRoutes.login, appRoutes.register]) {
-        return NextResponse.redirect(new URL(appRoutes.dashboard, req.url));
-    }
-    return res;
-}
+export default NextAuth(nextAuthConfig).auth;
+
+
+// export async function middleware(req: NextRequest) {
+//     const res = NextResponse.next();
+//     const { user } = await getSessionData({ res, req });
+//     if (!user && req.nextUrl.pathname === appRoutes.dashboard) {
+//         return NextResponse.redirect(new URL("/403", req.url));
+//     }
+//     if (user &&  [appRoutes.login, appRoutes.register].includes(req.nextUrl.pathname)) {
+//         return NextResponse.redirect(new URL(appRoutes.dashboard, req.url));
+//     }
+//     return res;
+// }
 
 export const config = {
     matcher: [
